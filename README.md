@@ -1,5 +1,6 @@
 # 𝗠𝗶𝗻𝗶-𝗣𝗿𝗼𝗷𝗲𝗰𝘁: 𝗦𝗼𝗿𝘁𝗶𝗻𝗴 𝗔𝗹𝗴𝗼𝗿𝗶𝘁𝗵𝗺𝘀 𝗩𝗶𝘀𝘂𝗮𝗹𝗶𝘀𝗮𝘁𝗶𝗼𝗻
 (12/6/2021 - 13/6/2021)
+
 This mini-project was conducted to better understand how different sorting algorithms (taught in QUT's CAB301 - Algorithms and Complexity) work. The project includes a GUI Application (a Windows Form) written in C# that visualises several sorting algorithms.
 
 ## 𝙄𝙢𝙥𝙡𝙚𝙢𝙚𝙣𝙩𝙚𝙙 𝘼𝙡𝙜𝙤𝙧𝙞𝙩𝙝𝙢𝙨
