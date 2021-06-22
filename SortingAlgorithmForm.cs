@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,11 +23,13 @@ namespace Algorithm_Visualisation
         private int NumEntries { get; set; }
         private int[] UnitWidths { get; set; }
         private int UnitHeight { get; set; }
-        public bool HasData { get; set; }
         public bool HasAlgorithm { get; set; }
         public Dictionary<int, Brush> Brushes { get; private set; }
 
         private LinearSortEngine sortEngine;
+        private Thread backgroundThread;
+        private Thread sortingThread;
+        private volatile bool isSorting;
 
         public SortingAlgorithmForm()
         {
@@ -35,7 +38,7 @@ namespace Algorithm_Visualisation
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -48,6 +51,36 @@ namespace Algorithm_Visualisation
 
         }
 
+        private void ThreadProc()
+        {
+            try
+            {
+                while (isSorting)
+                {
+                    UpdateTimer(sortEngine.GetCurrentStopWatchValue());
+                }
+            }
+            catch
+            {
+                isSorting = false;
+            }
+        }
+
+        private void UpdateTimer(string time)
+        {
+            SetTextBox(time);
+        }
+
+        private void SetTextBox(string value)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(SetTextBox), new object[] { value });
+                return;
+            }
+            timeBox.Text = value;
+        }
+
         private void btnReset_Click(object sender, EventArgs e)
         {
             ArrayToSort = BackUpArray.ToArray();
@@ -56,8 +89,19 @@ namespace Algorithm_Visualisation
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            sortingThread = new Thread(new ThreadStart(StartSorting));
+            sortingThread.Start();
+            if (!btnReset.Enabled)
+            {
+                btnReset.Enabled = true;
+            }
+        }
+
+        private void StartSorting()
+        {
+            isSorting = true;
             BackUpArray = ArrayToSort.ToArray();
-            string selectedAlgorithm = algorithmSelectionBox.Text;
+            string selectedAlgorithm = (string)Invoke(new Func<string>(() => algorithmSelectionBox.Text));
             switch (selectedAlgorithm)
             {
                 case "Insertion Sort":
@@ -86,14 +130,18 @@ namespace Algorithm_Visualisation
             }
             sortEngine.Initiate(ArrayToSort, G, panel1.Height, UnitWidths, UnitHeight);
             sortEngine.SetBrushDict(Brushes);
-            sortEngine.Sort();
-            if (!btnReset.Enabled)
-            {
-                btnReset.Enabled = true;
-            }
+            UpdateTimer("");
+            backgroundThread = new Thread(new ThreadStart(ThreadProc));
+            backgroundThread.Start();
+            sortEngine.Execute();
             memory = sortEngine.GetMemory();
-            SetPlayer();
-            UpdateDataBox();
+            Invoke((MethodInvoker) delegate { SetPlayer(); });
+            Invoke((MethodInvoker) delegate { UpdateDataBox(); });
+            //SetPlayer();
+            //UpdateDataBox();
+            isSorting = false;
+            backgroundThread.Join();
+            sortingThread.Join();
         }
 
         private void algorithmSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -115,11 +163,18 @@ namespace Algorithm_Visualisation
 
                 for (int i = 0; i < NumEntries; i++)
                 {
-                    G.FillRectangle(Brushes.GetValueOrDefault(ArrayToSort[i]),
-                                    i == 0 ? 0 : UnitWidths[..i].Sum(),
-                                    panel1.Height - ArrayToSort[i] * UnitHeight,
-                                    UnitWidths[i],
-                                    panel1.Height);
+                    try
+                    {
+                        G.FillRectangle(Brushes.GetValueOrDefault(ArrayToSort[i]),
+                                        i == 0 ? 0 : UnitWidths[..i].Sum(),
+                                        panel1.Height - ArrayToSort[i] * UnitHeight,
+                                        UnitWidths[i],
+                                        panel1.Height);
+                    }
+                    catch (Exception)
+                    {
+                        // Ignored
+                    }
                 }
                 if (updateDataBox)
                 {
@@ -174,7 +229,7 @@ namespace Algorithm_Visualisation
         /// </summary>
         public void SetReady()
         {
-            if (!btnStart.Enabled && HasData && HasAlgorithm)
+            if (!btnStart.Enabled && ArrayToSort != null && ArrayToSort.Length > 0 && HasAlgorithm)
             {
                 btnStart.Enabled = true;
             }
@@ -205,10 +260,10 @@ namespace Algorithm_Visualisation
         private void dataTextBox_TextChanged(object sender, EventArgs e)
         {
             ArrayToSort = DataForm.GenerateArrayFromString(dataTextBox.Text);
+            dataSizeBox.Text = ArrayToSort.Length > 0 ? ArrayToSort.Length.ToString() : "";
             GenerateBrushDict();
             ShowArray(false);
-            dataTextBox.Select(dataTextBox.Text.Length, 0);
-            HasData = true;
+            dataTextBox.Select(dataTextBox.Text.Length, 0);            
             SetReady();
         }
 
@@ -234,7 +289,7 @@ namespace Algorithm_Visualisation
 
         private static Brush GenerateBrush(int value, int maxValue)
         {
-            decimal ratio = decimal.Divide(value, maxValue);
+            decimal ratio = maxValue == 0 ? 0 : decimal.Divide(value, maxValue);
             int B = 0;
             int G = 0;
             int R = 0;

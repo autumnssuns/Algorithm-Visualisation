@@ -77,7 +77,6 @@ namespace Algorithm_Visualisation
         {
             parentForm.GenerateBrushDict();
             parentForm.ShowArray();
-            parentForm.HasData = true;
             parentForm.SetReady();
         }
 

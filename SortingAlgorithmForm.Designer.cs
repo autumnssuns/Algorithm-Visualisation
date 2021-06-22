@@ -43,6 +43,8 @@ namespace Algorithm_Visualisation
             this.stepBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dataTextBox = new System.Windows.Forms.TextBox();
+            this.timeBox = new System.Windows.Forms.TextBox();
+            this.dataSizeBox = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.replaySlider)).BeginInit();
             this.SuspendLayout();
@@ -185,17 +187,36 @@ namespace Algorithm_Visualisation
             // 
             this.dataTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataTextBox.Location = new System.Drawing.Point(224, 25);
+            this.dataTextBox.Location = new System.Drawing.Point(274, 25);
             this.dataTextBox.Name = "dataTextBox";
-            this.dataTextBox.Size = new System.Drawing.Size(531, 23);
+            this.dataTextBox.Size = new System.Drawing.Size(481, 23);
             this.dataTextBox.TabIndex = 11;
             this.dataTextBox.TextChanged += new System.EventHandler(this.dataTextBox_TextChanged);
+            // 
+            // timeBox
+            // 
+            this.timeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.timeBox.Location = new System.Drawing.Point(13, 530);
+            this.timeBox.Name = "timeBox";
+            this.timeBox.PlaceholderText = "Time";
+            this.timeBox.Size = new System.Drawing.Size(61, 23);
+            this.timeBox.TabIndex = 12;
+            // 
+            // dataSizeBox
+            // 
+            this.dataSizeBox.Location = new System.Drawing.Point(224, 25);
+            this.dataSizeBox.Name = "dataSizeBox";
+            this.dataSizeBox.PlaceholderText = "Size";
+            this.dataSizeBox.Size = new System.Drawing.Size(44, 23);
+            this.dataSizeBox.TabIndex = 13;
             // 
             // SortingAlgorithmForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 557);
+            this.Controls.Add(this.dataSizeBox);
+            this.Controls.Add(this.timeBox);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.dataTextBox);
             this.Controls.Add(this.label2);
@@ -235,6 +256,8 @@ namespace Algorithm_Visualisation
         private System.Windows.Forms.TextBox stepBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox dataTextBox;
+        private System.Windows.Forms.TextBox timeBox;
+        private System.Windows.Forms.TextBox dataSizeBox;
     }
 }
 
