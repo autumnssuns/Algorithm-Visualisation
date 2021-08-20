@@ -1,5 +1,8 @@
 ___This is not a complete application. I am not actively working on this project, and there is no plan to revisit it any time in the near future.___
 
+
+__[Demo video](http://www.youtube.com/watch?v=sIWiMuy9-zM "Sorting Algorithms Visualisation Demo")__
+
 [![Sorting Algorithms Visualisation Demo](http://img.youtube.com/vi/sIWiMuy9-zM/0.jpg)](http://www.youtube.com/watch?v=sIWiMuy9-zM "Sorting Algorithms Visualisation Demo")
 
 # 𝗠𝗶𝗻𝗶-𝗣𝗿𝗼𝗷𝗲𝗰𝘁: 𝗦𝗼𝗿𝘁𝗶𝗻𝗴 𝗔𝗹𝗴𝗼𝗿𝗶𝘁𝗵𝗺𝘀 𝗩𝗶𝘀𝘂𝗮𝗹𝗶𝘀𝗮𝘁𝗶𝗼𝗻
